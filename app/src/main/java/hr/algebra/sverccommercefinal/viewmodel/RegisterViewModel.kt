@@ -2,9 +2,10 @@ package hr.algebra.sverccommercefinal.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.algebra.sverccommercefinal.data.User
+import hr.algebra.sverccommercefinal.util.Constants.USER_COLLECTION
 import hr.algebra.sverccommercefinal.util.RegisterFieldsState
 import hr.algebra.sverccommercefinal.util.RegisterValidation
 import hr.algebra.sverccommercefinal.util.Resource
@@ -19,14 +20,15 @@ import javax.inject.Inject
 
 @HiltViewModel // Indicates that this is a Hilt-enabled ViewModel
 class RegisterViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth // Injected FirebaseAuth instance.
+    private val firebaseAuth: FirebaseAuth, // Injected FirebaseAuth instance.
+    private val db: FirebaseFirestore // Injected FirebaseFirestore instance.
 ) : ViewModel() {
 
     // A private mutable state flow for representing the registration process, initially set to 'Loading' state.
-    private val _register = MutableStateFlow<Resource<FirebaseUser>>(Resource.Unspecified())
+    private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
 
     // A public immutable flow property that exposes the registration process state.
-    val register: Flow<Resource<FirebaseUser>> = _register
+    val register: Flow<Resource<User>> = _register
 
     // A channel for sending and receiving validation state updates.
     private val _validation = Channel<RegisterFieldsState>()
@@ -41,8 +43,8 @@ class RegisterViewModel @Inject constructor(
             firebaseAuth.createUserWithEmailAndPassword(user.email, password)
                 .addOnSuccessListener { authResult ->
                     authResult.user?.let { firebaseUser ->
-                        // Set the '_register' state to 'Success' with the FirebaseUser object.
-                        _register.value = Resource.Success(firebaseUser)
+
+                        saveUserInfo(firebaseUser.uid, user) // Save user info to Firestore.
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -60,6 +62,19 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
+    // Function to save user information to Firestore.
+    private fun saveUserInfo(userUid: String, user: User) {
+        db.collection(USER_COLLECTION) // USER_COLLECTION is defined in util -> Constants.
+            .document(userUid) // Use the user's UID as the document ID.
+            .set(user) // Set user data in the document.
+            .addOnSuccessListener {
+                // Set the '_register' state to 'Success' with the User object.
+                _register.value = Resource.Success(user)
+            }.addOnFailureListener {
+                _register.value = Resource.Error(it.message.toString())
+            }
+    }
+
     // Function to check if email and password are valid for registration.
     private fun checkValidation(user: User, password: String): Boolean {
         val emailValidation = validateEmail(user.email)
@@ -70,4 +85,5 @@ class RegisterViewModel @Inject constructor(
         return shouldRegister
     }
 }
+
 
