@@ -2,4 +2,20 @@
     <string name="app_name">SvercCommerceFinal</string>
     <string name="rightAddress">The Right Address\nFor Shopping\nAnyday</string>
     <string name="quality">It is very easy to reach the\nbest quality among the\nproducts on the internet!</string>
+    <string name="backgroundImageDessc">Background</string>
+    <string name="application_name">SvercCommerce.</string>
+    <string name="let_s_login">Let\'s Login</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account?Register</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="facebook_logo_desc">Facebook logo</string>
+    <string name="facebook_button_text">Facebook</string>
+    <string name="google_logo_desc">Google logo</string>
+    <string name="google_button_text">Google</string>
+    <string name="login_button_text">Login</string>
+    <string name="background_start_view_desc">Background</string>
+    <string name="background_circle_start_view">Background circle</string>
+    <string name="texture_right_background_start_view">Texture right</string>
+    <string name="start_button_text">Start</string>
 </resources>

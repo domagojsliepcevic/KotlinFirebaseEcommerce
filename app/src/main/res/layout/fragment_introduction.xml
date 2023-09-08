@@ -16,14 +16,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/Elipse"
+        android:id="@+id/Logo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/guidelineElipseLeft"
-        app:layout_constraintEnd_toEndOf="@id/guidelineElipseRight"
-        app:layout_constraintTop_toTopOf="@id/guideElipseTop"
-        app:layout_constraintTop_toBottomOf="@id/guideElipseBottom"
-        android:background="@drawable/ellips"
+        app:layout_constraintStart_toStartOf="@id/guidelineLogoLeft"
+        app:layout_constraintEnd_toEndOf="@id/guidelineLogoRight"
+        app:layout_constraintTop_toTopOf="@id/guideLogoTop"
+        app:layout_constraintTop_toBottomOf="@id/guideLogoBottom"
+        android:background="@drawable/algebra_logo"
         android:contentDescription="@string/background_circle_start_view"
         app:layout_constraintDimensionRatio="1:1"/>
 
@@ -34,9 +34,9 @@
         style="@style/h4"
         android:layout_marginTop="@dimen/tvRightAddressMargin"
         app:layout_constraintTop_toTopOf="@id/guidelineLeftTexture"
-        app:layout_constraintStart_toStartOf="@id/Elipse"
-        app:layout_constraintEnd_toEndOf="@id/Elipse"
-        app:layout_constraintBottom_toBottomOf="@id/Elipse"
+        app:layout_constraintStart_toStartOf="@id/Logo"
+        app:layout_constraintEnd_toEndOf="@id/Logo"
+        app:layout_constraintBottom_toBottomOf="@id/Logo"
         android:text="@string/rightAddress"
         android:textAlignment="center"
         android:gravity="center"
@@ -88,31 +88,33 @@
         app:layout_constraintGuide_percent="0.33" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineElipseLeft"
+        android:id="@+id/guidelineLogoLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.15" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineElipseRight"
+        android:id="@+id/guidelineLogoRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.85" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideElipseTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.19" />
+
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideElipseBottom"
+        android:id="@+id/guideLogoTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.52" />
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLogoBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
