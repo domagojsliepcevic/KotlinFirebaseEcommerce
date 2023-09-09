@@ -7,4 +7,9 @@
     <dimen name="mediumButtonWidth">200dp</dimen>
     <dimen name="mediumButtonHeight">55dp</dimen>
     <dimen name="editTextHeight">60dp</dimen>
+    <dimen name="tvResetPassword_start_margin">10dp</dimen>
+    <dimen name="tvResetPassword_top_margin">10dp</dimen>
+    <dimen name="reset_password_text_size">18sp</dimen>
+    <dimen name="reset_password_expl_text">10dp</dimen>
+    <dimen name="reset_password_expl_text_size">12sp</dimen>
 </resources>

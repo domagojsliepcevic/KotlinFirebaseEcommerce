@@ -22,6 +22,12 @@ class LoginViewModel @Inject constructor(
     // A public shared flow property that exposes the login process state.
     val login = _login.asSharedFlow()
 
+    // A private mutable shared flow for representing the password reset process.
+    private val _resetPassword = MutableSharedFlow<Resource<String>>()
+
+    // A public shared flow property that exposes the password reset process state.
+    val resetPassword = _resetPassword.asSharedFlow()
+
     // Function to perform user login with an email and password.
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -43,4 +49,28 @@ class LoginViewModel @Inject constructor(
                 }
             }
     }
+
+    // Function to send a password reset email.
+    fun resetPassword(email: String) {
+        viewModelScope.launch {
+            _resetPassword.emit(Resource.Loading()) // Emit a loading state when reset begins.
+        }
+
+        firebaseAuth
+            .sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                viewModelScope.launch {
+                    // Set the '_resetPassword' state to 'Success' with the email address.
+                    _resetPassword.emit(Resource.Success(email))
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch {
+                    // Set the '_resetPassword' state to 'Error' with the error message.
+                    _resetPassword.emit(Resource.Error(it.message.toString()))
+                }
+            }
+    }
 }
+
+

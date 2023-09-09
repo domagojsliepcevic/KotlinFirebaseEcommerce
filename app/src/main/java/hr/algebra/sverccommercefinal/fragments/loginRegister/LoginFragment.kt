@@ -10,13 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import hr.algebra.sverccommercefinal.R
 import hr.algebra.sverccommercefinal.activities.ShoppingActivity
 import hr.algebra.sverccommercefinal.databinding.FragmentLoginBinding
+import hr.algebra.sverccommercefinal.dialog.setupBottomSheetDialog
 import hr.algebra.sverccommercefinal.util.Resource
 import hr.algebra.sverccommercefinal.viewmodel.LoginViewModel
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint // Indicates that this fragment is Hilt-enabled for dependency injection.
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -38,6 +39,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         // Set up a click listener to navigate to the registration fragment.
         binding.tvDontHaveAccount.setOnClickListener {
+            // Navigate to the registration fragment when "Don't have an account?" text is clicked.
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
@@ -48,6 +50,33 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 val password = etPasswordLogin.text.toString()
                 // Call the ViewModel's login function with the provided email and password.
                 viewModel.login(email, password)
+            }
+        }
+
+        // Set up a click listener for the "Forgot Password" text.
+        binding.tvForgotPasswordLogin.setOnClickListener {
+            // Call a function to set up and display a bottom sheet dialog for resetting the password.
+            setupBottomSheetDialog { email -> viewModel.resetPassword(email) }
+        }
+
+        @Suppress("DEPRECATION")
+        lifecycleScope.launchWhenStarted {
+            // Collect and react to changes in the ViewModel's 'resetPassword' flow.
+            viewModel.resetPassword.collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        // Handle loading state, if needed.
+                    }
+                    is Resource.Success -> {
+                        // Show a Snackbar to indicate success and provide a message.
+                        Snackbar.make(requireView(), "Reset link was sent to your email", Snackbar.LENGTH_LONG).show()
+                    }
+                    is Resource.Error -> {
+                        // Show a Snackbar to indicate an error with the provided error message.
+                        Snackbar.make(requireView(), "Error: ${it.message}", Snackbar.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
             }
         }
 
@@ -80,3 +109,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 }
+
