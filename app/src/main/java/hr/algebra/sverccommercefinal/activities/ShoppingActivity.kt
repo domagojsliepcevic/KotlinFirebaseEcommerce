@@ -19,5 +19,8 @@ class ShoppingActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.shoppingHostFragment)
         binding.bottomNavigation.setupWithNavController(navController)
+
+
+
     }
 }

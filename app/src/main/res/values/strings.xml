@@ -22,4 +22,12 @@
     <string name="we_will_send_you_the_password_reset_link_to_your_email">We will send you the password reset link to your email</string>
     <string name="cancel_reset_password">Cancel</string>
     <string name="send_reset_password">Send</string>
+    <string name="menu_item_title_home">Home</string>
+    <string name="menu_item_title_search">Search</string>
+    <string name="menu_item_title_cart">Cart</string>
+    <string name="menu_item_title_profile">Profile</string>
+    <string name="search_now">Search Now</string>
+    <string name="search_icon">Search icon</string>
+    <string name="microphone_icon">Microphone icon</string>
+    <string name="scan_icon">Scan icon</string>
 </resources>
