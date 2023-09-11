@@ -30,4 +30,20 @@
     <string name="search_icon">Search icon</string>
     <string name="microphone_icon">Microphone icon</string>
     <string name="scan_icon">Scan icon</string>
+    <string name="product_image">Product image</string>
+    <string name="item_name_placeholder">Chair</string>
+    <string name="favorite_icon">Favorite icon</string>
+    <string name="new_price_placeholder">$1600</string>
+    <string name="old_price_placeholder">$1600</string>
+    <string name="best_product_image">Best product image</string>
+    <string name="deal_product_placeholder">Scotch Premium</string>
+    <string name="price_before_discount">$2000</string>
+    <string name="discounted_price">$1600</string>
+    <string name="see_product_button_text">See product</string>
+    <string name="ad_placeholder_item_name">Scotch Premium</string>
+    <string name="special_product_image">special product image</string>
+    <string name="special_product_price">$1600</string>
+    <string name="add_to_cart_button_text">Add to cart</string>
+    <string name="best_deals">Best deals</string>
+    <string name="best_products">Best products</string>
 </resources>
