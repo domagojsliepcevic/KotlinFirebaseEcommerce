@@ -43,6 +43,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             FurnitureFragment(),
             AccessoryFragment()
         )
+        //Disables user input for the ViewPager located in the "binding.viewpagerHome" view.
+        binding.viewpagerHome.isUserInputEnabled = false
 
         // Create an adapter for the ViewPager.
         val viewPagerToAdapter = HomeViewPagerAdapter(categoriesFragments, childFragmentManager, lifecycle)

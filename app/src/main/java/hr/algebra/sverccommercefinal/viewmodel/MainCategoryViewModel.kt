@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.algebra.sverccommercefinal.data.Product
+import hr.algebra.sverccommercefinal.util.Constants.BEST_DEALS_PRODUCT_CATEGORY_VALUE
+import hr.algebra.sverccommercefinal.util.Constants.BEST_PRODUCT_CATEGORY_VALUE
 import hr.algebra.sverccommercefinal.util.Constants.PRODUCT_COLLECTION
-import hr.algebra.sverccommercefinal.util.Constants.SPECIAL_PRODUCT_CATEGORY_FIELD
+import hr.algebra.sverccommercefinal.util.Constants.CATEGORY_FIELD
 import hr.algebra.sverccommercefinal.util.Constants.SPECIAL_PRODUCT_CATEGORY_VALUE
 import hr.algebra.sverccommercefinal.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,8 @@ import javax.inject.Inject
  *
  * @property firestore: Injected instance of FirebaseFirestore for accessing Firestore database.
  * @property specialProducts: StateFlow that represents the state of special category products data.
+ * @property bestDealsProducts: StateFlow that represents the state of best deals products data.
+ * @property bestProducts: StateFlow that represents the state of best products data.
  */
 @HiltViewModel
 class MainCategoryViewModel @Inject constructor(
@@ -31,11 +35,25 @@ class MainCategoryViewModel @Inject constructor(
     // Public StateFlow property to expose the special category products state.
     val specialProducts: StateFlow<Resource<List<Product>>> = _specialProducts
 
+    // Private MutableStateFlow to represent the state of best deals products.
+    private val _bestDealsProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+
+    // Public StateFlow property to expose the best deals products state.
+    val bestDealsProducts: StateFlow<Resource<List<Product>>> = _bestDealsProducts
+
+    // Private MutableStateFlow to represent the state of best products.
+    private val _bestProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+
+    // Public StateFlow property to expose the best products state.
+    val bestProducts: StateFlow<Resource<List<Product>>> = _bestProducts
+
     /**
-     * Initialize the ViewModel and trigger the fetching of special category products.
+     * Initialize the ViewModel and trigger the fetching of special category products, best deals, and best products.
      */
     init {
         fetchSpecialProducts()
+        fetchBestDeals()
+        fetchBestProducts()
     }
 
     /**
@@ -48,7 +66,7 @@ class MainCategoryViewModel @Inject constructor(
 
         // Query Firestore for special products in the specific category.
         firestore.collection(PRODUCT_COLLECTION)
-            .whereEqualTo(SPECIAL_PRODUCT_CATEGORY_FIELD, SPECIAL_PRODUCT_CATEGORY_VALUE)
+            .whereEqualTo(CATEGORY_FIELD, SPECIAL_PRODUCT_CATEGORY_VALUE)
             .get()
             .addOnSuccessListener { result ->
                 val specialProductsList = result.toObjects(Product::class.java)
@@ -62,4 +80,51 @@ class MainCategoryViewModel @Inject constructor(
                 }
             }
     }
+
+    /**
+     * Fetches the best deals products from Firestore database.
+     */
+    fun fetchBestDeals() {
+        viewModelScope.launch {
+            _bestDealsProducts.emit(Resource.Loading())
+        }
+        firestore.collection(PRODUCT_COLLECTION)
+            .whereEqualTo(CATEGORY_FIELD, BEST_DEALS_PRODUCT_CATEGORY_VALUE)
+            .get()
+            .addOnSuccessListener { result ->
+                val bestDealsProducts = result.toObjects(Product::class.java)
+                viewModelScope.launch {
+                    _bestDealsProducts.emit(Resource.Success(bestDealsProducts)) // Emit a success state with the retrieved data.
+                }
+            }
+            .addOnFailureListener { exception ->
+                viewModelScope.launch {
+                    _bestDealsProducts.emit(Resource.Error(exception.message.toString())) // Emit an error state with the error message.
+                }
+            }
+    }
+
+    /**
+     * Fetches the best products from Firestore database.
+     */
+    fun fetchBestProducts() {
+        viewModelScope.launch {
+            _bestProducts.emit(Resource.Loading())
+        }
+        firestore.collection(PRODUCT_COLLECTION)
+            .whereEqualTo(CATEGORY_FIELD, BEST_PRODUCT_CATEGORY_VALUE)
+            .get()
+            .addOnSuccessListener { result ->
+                val bestProducts = result.toObjects(Product::class.java)
+                viewModelScope.launch {
+                    _bestProducts.emit(Resource.Success(bestProducts)) // Emit a success state with the retrieved data.
+                }
+            }
+            .addOnFailureListener { exception ->
+                viewModelScope.launch {
+                    _bestProducts.emit(Resource.Error(exception.message.toString())) // Emit an error state with the error message.
+                }
+            }
+    }
 }
+
