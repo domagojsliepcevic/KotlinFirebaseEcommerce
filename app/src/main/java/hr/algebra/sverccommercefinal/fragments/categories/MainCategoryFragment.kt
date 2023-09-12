@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -111,23 +112,22 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             }
         }
 
-
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.bestProducts.collectLatest { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         // Show loading progress for best products.
-                        showLoading()
+                        binding.bestProductsProgressBar.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
                         // Update the RecyclerView with the list of best products and hide loading progress.
                         bestProductAdapter.differ.submitList(resource.data)
-                        hideLoading()
+                        binding.bestProductsProgressBar.visibility = View.GONE
                     }
                     is Resource.Error -> {
                         // Hide loading progress, log the error, and display a toast with the error message.
-                        hideLoading()
+                        binding.bestProductsProgressBar.visibility = View.GONE
                         Log.e(TAG, resource.message.toString())
                         Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                     }
@@ -135,6 +135,18 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                 }
             }
         }
+
+        /**
+         * Sets up an `OnScrollChangeListener` for the `nestedScrollMainCategory` view.
+         * When the user scrolls and reaches the bottom of the nested scroll view, it triggers
+         * the fetching of more best products data from the ViewModel.
+         */
+        binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (v.getChildAt(0).bottom <= v.height + scrollY) {
+                viewModel.fetchBestProducts()
+            }
+        })
+
     }
 
     /**
@@ -184,4 +196,5 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
         }
     }
 }
+
 

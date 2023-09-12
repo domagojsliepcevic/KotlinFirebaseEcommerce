@@ -5,8 +5,14 @@ object Constants {
     const val USER_COLLECTION = "user"
 
 
-    //Defines a constant string for collection path for products in firestone
+    //Defines a constant string for collection path for products in firestore
     const val PRODUCT_COLLECTION = "Products"
+
+    //Defines a constant string for generated document ID in firestore
+    const val FIRESTORE_DOCUMENT_NAME = "__name__"
+
+    //Defines a constant string for category name in Firestore.
+    const val PRICE_FIELD = "price"
 
 
     //Defines a constant string for category name in Firestore.
