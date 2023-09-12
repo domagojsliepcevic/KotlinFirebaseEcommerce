@@ -85,7 +85,10 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                     else -> Unit
                 }
             }
+        }
 
+        @Suppress("DEPRECATION")
+        lifecycleScope.launchWhenStarted {
             viewModel.bestDealsProducts.collectLatest { resource ->
                 when (resource) {
                     is Resource.Loading -> {
@@ -106,7 +109,11 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                     else -> Unit
                 }
             }
+        }
 
+
+        @Suppress("DEPRECATION")
+        lifecycleScope.launchWhenStarted {
             viewModel.bestProducts.collectLatest { resource ->
                 when (resource) {
                     is Resource.Loading -> {

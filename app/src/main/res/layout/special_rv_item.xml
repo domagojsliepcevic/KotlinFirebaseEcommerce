@@ -51,7 +51,7 @@
             android:fontFamily="@font/sf_pro_display"/>
 
         <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
-            android:id="@+id/btn_add_to_cart"
+            android:id="@+id/btnAddToCart"
             android:layout_width="77dp"
             android:layout_height="25dp"
             android:background="@drawable/blue_background"
