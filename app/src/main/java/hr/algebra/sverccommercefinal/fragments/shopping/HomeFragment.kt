@@ -16,6 +16,7 @@ import hr.algebra.sverccommercefinal.fragments.categories.FurnitureFragment
 import hr.algebra.sverccommercefinal.fragments.categories.MainCategoryFragment
 import hr.algebra.sverccommercefinal.fragments.categories.OutdoorsFragment
 import hr.algebra.sverccommercefinal.fragments.categories.ToolsFragment
+import hr.algebra.sverccommercefinal.fragments.categories.ToysAndGamesFragment
 
 
 /**
@@ -44,7 +45,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             AccessoryFragment(),
             FurnitureFragment(),
             OutdoorsFragment(),
-            ToolsFragment()
+            ToolsFragment(),
+            ToysAndGamesFragment()
+
         )
         //Disables user input for the ViewPager located in the "binding.viewpagerHome" view.
         binding.viewpagerHome.isUserInputEnabled = false
@@ -66,6 +69,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 4 -> tab.text = "Furniture"
                 5 -> tab.text = "Outdoors"
                 6 -> tab.text = "Tools"
+                7 -> tab.text = "Toys and Games"
 
             }
         }.attach()

@@ -4,21 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import hr.algebra.sverccommercefinal.R
 import hr.algebra.sverccommercefinal.adapters.BestProductAdapter
 import hr.algebra.sverccommercefinal.databinding.FragmentBaseCategoryBinding
 
 /**
- * Base fragment for displaying category-specific products.
- * All other category fragments inherit from this base fragment.
+ * Base fragment for displaying category-specific products. All other category fragments inherit from this base fragment.
+ *
+ * This base fragment provides common functionality for displaying products, such as best products and offers,
+ * within category-specific fragments.
  */
 open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
     private lateinit var binding: FragmentBaseCategoryBinding
-    private lateinit var offerAdapter: BestProductAdapter
-    private lateinit var bestProductAdapter: BestProductAdapter
+
+    // Adapter for displaying offers. Lazily initialized to improve performance.
+    protected val offerAdapter: BestProductAdapter by lazy { BestProductAdapter() }
+
+    // Adapter for displaying best products. Lazily initialized to improve performance.
+    protected val bestProductAdapter: BestProductAdapter by lazy { BestProductAdapter() }
 
     /**
      * Inflates the layout for this fragment and initializes the binding.
@@ -43,13 +51,75 @@ open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
 
         // Set up RecyclerView for offers.
         setupOfferRv()
+
+        // Set up an `OnScrollListener` for the `rvOffer` RecyclerView to handle paging.
+        binding.rvOffer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // Check if the user has reached the end of the offers RecyclerView.
+                if (!recyclerView.canScrollVertically(1) && dx != 0) {
+                    onOfferPagingRequest()
+                }
+            }
+        })
+
+        // Set up an `OnScrollChangeListener` for the `nestedScrollBaseCategory` view to handle paging of best products.
+        binding.nestedScrollBaseCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (v.getChildAt(0).bottom <= v.height + scrollY) {
+                onBestProductsPagingRequest()
+            }
+        })
+    }
+
+    /**
+     * Show loading indicator for offers.
+     */
+    fun showOfferLoading() {
+        binding.offerProductsProgressBar.visibility = View.VISIBLE
+    }
+
+    /**
+     * Hide loading indicator for offers.
+     */
+    fun hideOfferLoading() {
+        binding.offerProductsProgressBar.visibility = View.GONE
+    }
+
+    /**
+     * Show loading indicator for best products.
+     */
+    fun showBestProductsLoading() {
+        binding.bestProductsProgressBar.visibility = View.VISIBLE
+    }
+
+    /**
+     * Hide loading indicator for best products.
+     */
+    fun hideBestProductsLoading() {
+        binding.bestProductsProgressBar.visibility = View.GONE
+    }
+
+    /**
+     * Callback function for handling offer paging requests.
+     * Subclasses can override this function to implement custom paging behavior.
+     */
+    open fun onOfferPagingRequest() {
+        // Implement custom paging behavior for offers if needed.
+    }
+
+    /**
+     * Callback function for handling best products paging requests.
+     * Subclasses can override this function to implement custom paging behavior.
+     */
+    open fun onBestProductsPagingRequest() {
+        // Implement custom paging behavior for best products if needed.
     }
 
     /**
      * Sets up the RecyclerView and its adapter for displaying best products.
      */
     private fun setupBestProductsRv() {
-        bestProductAdapter = BestProductAdapter()
         binding.rvBestProducts.apply {
             layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
             adapter = bestProductAdapter
@@ -60,10 +130,10 @@ open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
      * Sets up the RecyclerView and its adapter for displaying offers.
      */
     private fun setupOfferRv() {
-        offerAdapter = BestProductAdapter()
-        binding.rvBestProducts.apply {
+        binding.rvOffer.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = offerAdapter
         }
     }
 }
+

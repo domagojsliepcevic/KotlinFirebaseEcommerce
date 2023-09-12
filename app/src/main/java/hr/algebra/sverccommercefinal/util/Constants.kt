@@ -18,6 +18,9 @@ object Constants {
     //Defines a constant string for category name in Firestore.
     const val CATEGORY_FIELD = "category"
 
+    //Defines a constant string for offer percentage field in Firestore
+    const val OFFER_PERCENTAGE_FIELD = "offerPercentage"
+
 
     //Defines a constant string for special product category value field in Firestore.
     const val SPECIAL_PRODUCT_CATEGORY_VALUE = "Special Products"

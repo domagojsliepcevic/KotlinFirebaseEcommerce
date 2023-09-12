@@ -18,23 +18,34 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-@HiltViewModel // Indicates that this is a Hilt-enabled ViewModel
+/**
+ * ViewModel class responsible for handling user registration with Firebase.
+ *
+ * @property firebaseAuth: Injected FirebaseAuth instance for user authentication.
+ * @property db: Injected FirebaseFirestore instance for data storage.
+ */
+@HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth, // Injected FirebaseAuth instance.
-    private val db: FirebaseFirestore // Injected FirebaseFirestore instance.
+    private val firebaseAuth: FirebaseAuth,
+    private val db: FirebaseFirestore
 ) : ViewModel() {
 
-    // A private mutable state flow for representing the registration process, initially set to 'Loading' state.
+    // A private mutable StateFlow representing the registration process, initially set to 'Loading' state.
     private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
 
-    // A public immutable flow property that exposes the registration process state.
+    // A public immutable Flow property exposing the registration process state.
     val register: Flow<Resource<User>> = _register
 
     // A channel for sending and receiving validation state updates.
     private val _validation = Channel<RegisterFieldsState>()
     val validation = _validation.receiveAsFlow()
 
-    // Function to create a new user account with email and password.
+    /**
+     * Function to create a new user account with email and password.
+     *
+     * @param user: User object containing user details for registration.
+     * @param password: Password provided by the user.
+     */
     fun createAccountWithEmailAndPassword(user: User, password: String) {
         if (checkValidation(user, password)) {
             runBlocking {
@@ -43,7 +54,6 @@ class RegisterViewModel @Inject constructor(
             firebaseAuth.createUserWithEmailAndPassword(user.email, password)
                 .addOnSuccessListener { authResult ->
                     authResult.user?.let { firebaseUser ->
-
                         saveUserInfo(firebaseUser.uid, user) // Save user info to Firestore.
                     }
                 }
@@ -62,7 +72,12 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    // Function to save user information to Firestore.
+    /**
+     * Function to save user information to Firestore.
+     *
+     * @param userUid: User's UID obtained from Firebase authentication.
+     * @param user: User object containing user details.
+     */
     private fun saveUserInfo(userUid: String, user: User) {
         db.collection(USER_COLLECTION) // USER_COLLECTION is defined in util -> Constants.
             .document(userUid) // Use the user's UID as the document ID.
@@ -75,7 +90,13 @@ class RegisterViewModel @Inject constructor(
             }
     }
 
-    // Function to check if email and password are valid for registration.
+    /**
+     * Function to check if email and password are valid for registration.
+     *
+     * @param user: User object containing user details.
+     * @param password: Password provided by the user.
+     * @return Boolean indicating whether the registration is allowed based on validation results.
+     */
     private fun checkValidation(user: User, password: String): Boolean {
         val emailValidation = validateEmail(user.email)
         val passwordValidation = validatePassword(password)
@@ -85,5 +106,6 @@ class RegisterViewModel @Inject constructor(
         return shouldRegister
     }
 }
+
 
 

@@ -14,20 +14,20 @@ import hr.algebra.sverccommercefinal.viewmodel.factory.BaseCategoryViewModelFact
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 /**
- * Fragment responsible for displaying Furniture category products.
+ * Fragment responsible for displaying Toys and Games category products.
  *
  * This fragment inherits from [BaseCategoryFragment] and is annotated with [AndroidEntryPoint]
  * to enable Hilt dependency injection.
  */
 @AndroidEntryPoint
-class FurnitureFragment : BaseCategoryFragment() {
+class ToysAndGamesFragment : BaseCategoryFragment() {
 
     @Inject
     lateinit var firestore: FirebaseFirestore // Injected instance of FirebaseFirestore for database access.
 
-    // View model for managing Furniture category data.
+    // View model for managing Toys and Games category data.
     val viewModel by viewModels<CategoryViewModel> {
-        BaseCategoryViewModelFactory(firestore, Category.Furniture)
+        BaseCategoryViewModelFactory(firestore, Category.ToysAndGames)
     }
 
     /**

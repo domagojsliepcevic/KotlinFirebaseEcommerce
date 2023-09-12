@@ -11,9 +11,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel // Indicates that this is a Hilt-enabled ViewModel
+/**
+ * ViewModel class responsible for user login and password reset using Firebase Authentication.
+ *
+ * @property firebaseAuth: Injected FirebaseAuth instance for user authentication.
+ */
+@HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth // Injected FirebaseAuth instance.
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     // A private mutable shared flow for representing the login process.
@@ -28,7 +33,12 @@ class LoginViewModel @Inject constructor(
     // A public shared flow property that exposes the password reset process state.
     val resetPassword = _resetPassword.asSharedFlow()
 
-    // Function to perform user login with an email and password.
+    /**
+     * Function to perform user login with an email and password.
+     *
+     * @param email: User's email address.
+     * @param password: User's password.
+     */
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _login.emit(Resource.Loading()) // Emit a loading state when login begins.
@@ -50,7 +60,11 @@ class LoginViewModel @Inject constructor(
             }
     }
 
-    // Function to send a password reset email.
+    /**
+     * Function to send a password reset email to the user.
+     *
+     * @param email: User's email address for password reset.
+     */
     fun resetPassword(email: String) {
         viewModelScope.launch {
             _resetPassword.emit(Resource.Loading()) // Emit a loading state when reset begins.
@@ -72,5 +86,6 @@ class LoginViewModel @Inject constructor(
             }
     }
 }
+
 
 
