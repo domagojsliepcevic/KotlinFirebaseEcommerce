@@ -1,4 +1,4 @@
 package hr.algebra.sverccommercefinal.fragments.categories
 
-class ChairFragment:BaseCategoryFragment() {
+class ClothesFragment:BaseCategoryFragment() {
 }
