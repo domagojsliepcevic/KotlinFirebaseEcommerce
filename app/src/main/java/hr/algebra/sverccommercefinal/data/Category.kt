@@ -8,6 +8,6 @@ sealed class Category(val category:String){
     object Furniture:Category("Furniture")
     object Outdoors:Category("Outdoors")
     object Tools:Category("Tools")
-    object ToysAndGames:Category("ToysAndGames")
+    object ToysAndGames:Category("Toys and Games")
 
 }
