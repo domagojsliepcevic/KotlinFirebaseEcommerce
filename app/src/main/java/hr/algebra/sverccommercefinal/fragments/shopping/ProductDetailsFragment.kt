@@ -93,7 +93,9 @@ class ProductDetailsFragment : Fragment() {
             val hasColors = !product.colors.isNullOrEmpty()
             val hasSizes = !product.sizes.isNullOrEmpty()
 
-            if ((hasColors || !hasSizes) && selectedColor != null && selectedSize != null) {
+            val isValidSelection = (!hasColors || selectedColor != null) && (!hasSizes || selectedSize != null)
+
+            if (isValidSelection) {
                 // Add or update the selected product to the cart using the ViewModel.
                 viewModel.addUpdateProductInCart(CartProduct(product, 1, selectedColor, selectedSize))
             } else {
@@ -101,6 +103,7 @@ class ProductDetailsFragment : Fragment() {
                 Snackbar.make(view, "Error: Please select valid colors and sizes", Snackbar.LENGTH_SHORT).show()
             }
         }
+
 
         // Observe the addToCart flow from the ViewModel and update UI accordingly.
         @Suppress("DEPRECATION")
