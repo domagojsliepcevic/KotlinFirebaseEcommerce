@@ -10,6 +10,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +20,7 @@ import hr.algebra.sverccommercefinal.adapters.BestProductAdapter
 import hr.algebra.sverccommercefinal.adapters.SpecialProductsAdapter
 import hr.algebra.sverccommercefinal.databinding.FragmentMainCategoryBinding
 import hr.algebra.sverccommercefinal.util.Resource
+import hr.algebra.sverccommercefinal.util.showBottomNavigationView
 import hr.algebra.sverccommercefinal.viewmodel.MainCategoryViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -64,6 +66,25 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
         setupBestDealsRv()
         setupBestProductRv()
 
+        // Set an onClick listener for special product items to navigate to the product details page.
+        specialProductsAdapter.onClick = { product ->
+            val bundle = Bundle().apply { putParcelable("product", product) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Set an onClick listener for best deals product items to navigate to the product details page.
+        bestDealsAdapter.onClick = { product ->
+            val bundle = Bundle().apply { putParcelable("product", product) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Set an onClick listener for best product items to navigate to the product details page.
+        bestProductAdapter.onClick = { product ->
+            val bundle = Bundle().apply { putParcelable("product", product) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Observe special products data and update the UI accordingly.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.specialProducts.collectLatest { resource ->
@@ -88,6 +109,7 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             }
         }
 
+        // Observe best deals products data and update the UI accordingly.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.bestDealsProducts.collectLatest { resource ->
@@ -112,6 +134,7 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             }
         }
 
+        // Observe best products data and update the UI accordingly.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.bestProducts.collectLatest { resource ->
@@ -136,17 +159,14 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             }
         }
 
-        /**
-         * Sets up an `OnScrollChangeListener` for the `nestedScrollMainCategory` view.
-         * When the user scrolls and reaches the bottom of the nested scroll view, it triggers
-         * the fetching of more best products data from the ViewModel.
-         */
+        // Set up an `OnScrollChangeListener` for the `nestedScrollMainCategory` view.
+        // When the user scrolls and reaches the bottom of the nested scroll view, it triggers
+        // the fetching of more best products data from the ViewModel.
         binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
             if (v.getChildAt(0).bottom <= v.height + scrollY) {
                 viewModel.fetchBestProducts()
             }
         })
-
     }
 
     /**
@@ -195,6 +215,15 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             adapter = bestProductAdapter
         }
     }
+
+    /**
+     * Callback for when the fragment is resumed. Show the bottom navigation view.
+     */
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
+    }
 }
+
 
 

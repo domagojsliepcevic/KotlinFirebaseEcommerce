@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hr.algebra.sverccommercefinal.R
 import hr.algebra.sverccommercefinal.adapters.BestProductAdapter
 import hr.algebra.sverccommercefinal.databinding.FragmentBaseCategoryBinding
+import hr.algebra.sverccommercefinal.util.showBottomNavigationView
 
 /**
  * Base fragment for displaying category-specific products. All other category fragments inherit from this base fragment.
@@ -51,6 +53,18 @@ open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
 
         // Set up RecyclerView for offers.
         setupOfferRv()
+
+        // Set an onClick listener for best product items to navigate to the product details page.
+        bestProductAdapter.onClick = { product ->
+            val bundle = Bundle().apply { putParcelable("product", product) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Set an onClick listener for offer items to navigate to the product details page.
+        offerAdapter.onClick = { product ->
+            val bundle = Bundle().apply { putParcelable("product", product) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
 
         // Set up an `OnScrollListener` for the `rvOffer` RecyclerView to handle paging.
         binding.rvOffer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -135,5 +149,14 @@ open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
             adapter = offerAdapter
         }
     }
+
+    /**
+     * Callback for when the fragment is resumed. Show the bottom navigation view.
+     */
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
+    }
 }
+
 

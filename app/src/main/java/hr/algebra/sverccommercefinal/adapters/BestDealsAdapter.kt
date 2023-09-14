@@ -15,40 +15,44 @@ import hr.algebra.sverccommercefinal.databinding.BestDealsRvItemBinding
  *
  * @property differ: AsyncListDiffer responsible for calculating the differences between old and new lists.
  */
-class BestDealsAdapter: RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolder>(){
+class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolder>() {
 
     /**
      * Inner ViewHolder class representing a single item in the RecyclerView.
      *
      * @property binding: View binding for the item layout.
      */
-    inner class BestDealsViewHolder(private val binding: BestDealsRvItemBinding):ViewHolder(binding.root){
+    inner class BestDealsViewHolder(private val binding: BestDealsRvItemBinding) :
+        ViewHolder(binding.root) {
 
         /**
          * Binds the data of a product to the ViewHolder's views.
          *
          * @param product: The product to be displayed in the item.
          */
-        fun bind(product: Product){
+        fun bind(product: Product) {
             binding.apply {
+                // Load the product's image into the ImageView using Glide.
                 Glide.with(itemView).load(product.images[0]).into(imgBestDeal)
-                product.offerPercentage?.let {
-                    val remainingPricePercentage = 1f -it
-                    val priceAfterOffer = remainingPricePercentage * product.price
-                    tvNewPrice.text = "$ ${String.format("%.2f",priceAfterOffer)}"
 
+                // Calculate the price after applying the offer percentage if available.
+                product.offerPercentage?.let {
+                    val remainingPricePercentage = 1f - it
+                    val priceAfterOffer = remainingPricePercentage * product.price
+                    tvNewPrice.text = "€ ${String.format("%.2f", priceAfterOffer)}"
                 }
-                tvOldPrice.text = "$ ${product.price}"
+
+                // Set the old price and product name.
+                tvOldPrice.text = "€ ${product.price}"
                 tvDealProductName.text = product.name
             }
-
         }
     }
 
     /**
      * Callback for calculating the differences between old and new items in the list.
      */
-    private val diffCallback = object: DiffUtil.ItemCallback<Product>(){
+    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             // Check if the unique identifiers of old and new items are the same.
             return oldItem.id == newItem.id
@@ -58,11 +62,17 @@ class BestDealsAdapter: RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolde
             // Check if the content of old and new items is the same (full equality check).
             return oldItem == newItem
         }
-
     }
 
     // Initialize an AsyncListDiffer with the diffCallback.
     val differ = AsyncListDiffer(this, diffCallback)
+
+    /**
+     * Creates a new ViewHolder by inflating the item layout.
+     *
+     * @param parent: The parent ViewGroup.
+     * @param viewType: The type of view.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestDealsViewHolder {
         // Inflate the item layout and create a ViewHolder for it.
         return BestDealsViewHolder(
@@ -72,16 +82,30 @@ class BestDealsAdapter: RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolde
         )
     }
 
+    /**
+     * Returns the current item count in the list.
+     */
     override fun getItemCount(): Int {
-        // Return the current item count in the list.
         return differ.currentList.size
     }
 
+    /**
+     * Binds data to the ViewHolder at the specified position.
+     *
+     * @param holder: The ViewHolder to bind data to.
+     * @param position: The position of the item in the list.
+     */
     override fun onBindViewHolder(holder: BestDealsViewHolder, position: Int) {
         // Get the product at the current position and bind it to the ViewHolder.
         val product = differ.currentList[position]
         holder.bind(product)
+
+        // Set an OnClickListener to handle item clicks.
+        holder.itemView.setOnClickListener {
+            onClick?.invoke(product)
+        }
     }
 
-
+    // Callback to handle item clicks.
+    var onClick: ((Product) -> Unit)? = null
 }

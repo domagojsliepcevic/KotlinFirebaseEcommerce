@@ -58,6 +58,12 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
     // Initialize an AsyncListDiffer with the diffCallback.
     val differ = AsyncListDiffer(this, diffCallback)
 
+    /**
+     * Creates a new ViewHolder by inflating the item layout.
+     *
+     * @param parent: The parent ViewGroup.
+     * @param viewType: The type of view.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialProductsViewHolder {
         // Inflate the item layout and create a ViewHolder for it.
         return SpecialProductsViewHolder(
@@ -67,14 +73,31 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
         )
     }
 
+    /**
+     * Returns the current item count in the list.
+     */
     override fun getItemCount(): Int {
-        // Return the current item count in the list.
         return differ.currentList.size
     }
 
+    /**
+     * Binds data to the ViewHolder at the specified position.
+     *
+     * @param holder: The ViewHolder to bind data to.
+     * @param position: The position of the item in the list.
+     */
     override fun onBindViewHolder(holder: SpecialProductsViewHolder, position: Int) {
         // Get the product at the current position and bind it to the ViewHolder.
         val product = differ.currentList[position]
         holder.bind(product)
+
+        // Set an OnClickListener to handle item clicks.
+        holder.itemView.setOnClickListener {
+            onClick?.invoke(product)
+        }
     }
+
+    // Callback to handle item clicks.
+    var onClick: ((Product) -> Unit)? = null
 }
+
