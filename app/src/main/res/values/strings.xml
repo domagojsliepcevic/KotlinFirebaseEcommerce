@@ -46,4 +46,11 @@
     <string name="add_to_cart_button_text">Add to cart</string>
     <string name="best_deals">Best deals</string>
     <string name="best_products">Best products</string>
+    <string name="product_place_holder_text">Product place holder text</string>
+    <string name="product_placeholder_price">€1200</string>
+    <string name="product_placeholder_description">Product description</string>
+    <string name="colors_list_name">Colors</string>
+    <string name="sizes_list_name">Sizes</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="size_placeholder">S</string>
 </resources>
