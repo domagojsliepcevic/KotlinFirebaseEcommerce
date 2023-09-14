@@ -1,5 +1,6 @@
 package hr.algebra.sverccommercefinal.fragments.loginRegister
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.algebra.sverccommercefinal.R
+import hr.algebra.sverccommercefinal.activities.ShoppingActivity
 import hr.algebra.sverccommercefinal.data.User
 import hr.algebra.sverccommercefinal.databinding.FragmentRegisterBinding
 import hr.algebra.sverccommercefinal.util.RegisterValidation
@@ -56,6 +58,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 val password = etPasswordRegister.text.toString()
                 // Call the ViewModel's function to create a user account with the provided data.
                 viewModel.createAccountWithEmailAndPassword(user, password)
+
+
+
             }
         }
 
@@ -72,6 +77,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         // Log a successful registration and revert any animation on the button.
                         Log.d("test", it.data.toString())
                         binding.buttonRegisterRegister.revertAnimation()
+                        // Create an intent to start the ShoppingActivity and clear the back stack.
+                        Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
                     }
                     is Resource.Error -> {
                         // Log an error message and revert any animation on the button.
