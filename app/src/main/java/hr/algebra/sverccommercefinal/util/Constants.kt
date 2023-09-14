@@ -8,6 +8,12 @@ object Constants {
     //Defines a constant string for collection path for products in firestore
     const val PRODUCT_COLLECTION = "Products"
 
+    //Defines a constant string for user  subcollection cart in firestore
+    const val CART_SUBCOLLECTION = "cart"
+
+    //Defines a constant string for user  subcollection cart product id value in firestore
+    const val CART_SUBCOLLECTION_PRODUCT_ID = "product.id"
+
     //Defines a constant string for generated document ID in firestore
     const val FIRESTORE_DOCUMENT_NAME = "__name__"
 

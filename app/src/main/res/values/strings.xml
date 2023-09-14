@@ -53,4 +53,5 @@
     <string name="sizes_list_name">Sizes</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="size_placeholder">S</string>
+    <string name="product_added_to_cart">Product added to cart</string>
 </resources>
