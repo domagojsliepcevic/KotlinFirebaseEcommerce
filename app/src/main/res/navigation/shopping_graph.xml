@@ -73,4 +73,9 @@
             android:name="products"
             app:argType="hr.algebra.sverccommercefinal.data.CartProduct[]" />
     </fragment>
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="hr.algebra.sverccommercefinal.fragments.settings.UserAccountFragment"
+        android:label="UserAccountFragment"
+        tools:layout="@layout/fragment_user_account"/>
 </navigation>
