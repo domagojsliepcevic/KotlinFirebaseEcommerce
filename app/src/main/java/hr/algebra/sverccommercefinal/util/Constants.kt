@@ -8,8 +8,14 @@ object Constants {
     //Defines a constant string for collection path for products in firestore
     const val PRODUCT_COLLECTION = "Products"
 
+    //Defines a constant string for user  subcollection orders in firestore
+    const val ORDERS_COLLECTION = "orders"
+
     //Defines a constant string for user  subcollection cart in firestore
     const val CART_SUBCOLLECTION = "cart"
+
+    //Defines a constant string for user  subcollection orders in firestore
+    const val ORDERS_SUBCOLLECTION = "orders"
 
     //Defines a constant string for user  subcollection address in firestore
     const val ADDRESS_SUBCOLLECTION = "address"
