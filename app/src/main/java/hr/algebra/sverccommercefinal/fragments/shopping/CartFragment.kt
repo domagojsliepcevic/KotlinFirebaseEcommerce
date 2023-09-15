@@ -50,6 +50,8 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         // Set up the RecyclerView for the cart.
         setupCartRv()
 
+        var totalPrice = 0f
+
         // Handle the close button click to navigate back.
         binding.imageCloseCart.setOnClickListener {
             findNavController().navigateUp()
@@ -60,6 +62,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         lifecycleScope.launchWhenStarted {
             viewModel.productsPrice.collectLatest { price ->
                 price?.let {
+                    totalPrice = it
                     binding.tvTotalPrice.text = "€ ${String.format("%.2f", price)}"
                 }
             }
@@ -79,6 +82,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         // Handle click to decrease the quantity of a cart product.
         cartAdapter.onMinusClick = {
             viewModel.changeQuantity(it, FirebaseCommon.QuantityChanging.DECREASE)
+        }
+
+        binding.buttonCheckout.setOnClickListener {
+            val action = CartFragmentDirections.actionCartFragmentToBillingFragment(totalPrice,cartAdapter.differ.currentList.toTypedArray())
+            findNavController().navigate(action)
         }
 
         // Observe and display a delete confirmation dialog.
@@ -130,39 +138,65 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         }
     }
 
+    /**
+     * Shows the necessary views when the cart is not empty.
+     */
     private fun showOtherViews() {
         binding.apply {
+            // Make the RecyclerView, totalBoxContainer, and checkout button visible.
             rvCart.visibility = View.VISIBLE
             totalBoxContainer.visibility = View.VISIBLE
             buttonCheckout.visibility = View.VISIBLE
         }
     }
 
+    /**
+     * Hides the unnecessary views when the cart is not empty.
+     */
     private fun hideOtherViews() {
         binding.apply {
+            // Hide the RecyclerView, totalBoxContainer, and checkout button.
             rvCart.visibility = View.GONE
             totalBoxContainer.visibility = View.GONE
             buttonCheckout.visibility = View.GONE
         }
     }
 
+    /**
+     * Hides the view indicating an empty cart.
+     */
     private fun hideEmptyCart() {
         binding.apply {
+            // Hide the empty cart view.
             layoutCartEmpty.visibility = View.GONE
         }
     }
 
+    /**
+     * Shows the view indicating an empty cart.
+     */
     private fun showEmptyCart() {
         binding.apply {
+            // Show the empty cart view.
             layoutCartEmpty.visibility = View.VISIBLE
         }
     }
 
+    /**
+     * Sets up the RecyclerView for displaying cart products.
+     */
     private fun setupCartRv() {
         binding.rvCart.apply {
+            // Configure the RecyclerView with a vertical LinearLayoutManager.
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+            // Set the adapter to the CartProductAdapter for managing cart product items.
             adapter = cartAdapter
+
+            // Add a vertical item decoration for spacing between items.
             addItemDecoration(VerticalItemDecoration())
         }
     }
+
 }
+
