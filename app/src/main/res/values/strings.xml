@@ -98,4 +98,16 @@
     <string name="order_product_list">Products</string>
     <string name="order_total_price">Total</string>
     <string name="order_address_details">Address</string>
+    <string name="edit_personal_details">edit personal details</string>
+    <string name="settings">Settings</string>
+    <string name="profile_name">Name</string>
+    <string name="all_orders_profile_view">All orders</string>
+    <string name="track_orders">Track Orders</string>
+    <string name="billing_profile_view">Billing</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_view">Notifications</string>
+    <string name="regional">Regional</string>
+    <string name="logout">Logout</string>
+    <string name="version_1_0">Version 1.0</string>
+    <string name="orders_account_settings_view">Orders</string>
 </resources>
