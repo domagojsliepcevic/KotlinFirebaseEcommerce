@@ -11,6 +11,9 @@ object Constants {
     //Defines a constant string for user  subcollection cart in firestore
     const val CART_SUBCOLLECTION = "cart"
 
+    //Defines a constant string for user  subcollection address in firestore
+    const val ADDRESS_SUBCOLLECTION = "address"
+
     //Defines a constant string for user  subcollection cart product id value in firestore
     const val CART_SUBCOLLECTION_PRODUCT_ID = "product.id"
 
