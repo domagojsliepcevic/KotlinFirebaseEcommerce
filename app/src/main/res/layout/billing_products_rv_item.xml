@@ -73,7 +73,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginStart="5dp"
-            android:src="@color/g_blue_gray200"
+            android:src="@color/g_black"
             app:layout_constraintStart_toEndOf="@id/imageCartProductColor"
             app:layout_constraintTop_toTopOf="@id/imageCartProductColor"/>
 
