@@ -91,4 +91,11 @@
     <string name="save_account_settings_button">Save</string>
     <string name="all_orders">All orders</string>
     <string name="no_orders_to_show">No orders to show</string>
+    <string name="order_placeholder_name">#1234567</string>
+    <string name="order_placeholder_address">Address</string>
+    <string name="order_fullname_placeholder">Full Name</string>
+    <string name="order_phone_placeholder">Phone</string>
+    <string name="order_product_list">Products</string>
+    <string name="order_total_price">Total</string>
+    <string name="order_address_details">Address</string>
 </resources>
