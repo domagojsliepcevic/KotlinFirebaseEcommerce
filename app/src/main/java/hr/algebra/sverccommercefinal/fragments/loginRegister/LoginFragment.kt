@@ -2,6 +2,7 @@ package hr.algebra.sverccommercefinal.fragments.loginRegister
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,17 +20,22 @@ import hr.algebra.sverccommercefinal.dialog.setupBottomSheetDialog
 import hr.algebra.sverccommercefinal.util.Resource
 import hr.algebra.sverccommercefinal.viewmodel.LoginViewModel
 
-@AndroidEntryPoint // Indicates that this fragment is Hilt-enabled for dependency injection.
+/**
+ * Fragment responsible for user login.
+ *
+ * @property binding: Lazily inflated view binding for this fragment's layout.
+ * @property viewModel: ViewModel for managing the user login process.
+ */
+@AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
-    private lateinit var binding: FragmentLoginBinding // View binding for this fragment.
-    private val viewModel by viewModels<LoginViewModel>() // Initialize the LoginViewModel using Hilt's viewModels delegate.
+    private lateinit var binding: FragmentLoginBinding
+    private val viewModel by viewModels<LoginViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflates the layout for this fragment and initializes view binding.
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater)
         return binding.root
     }
@@ -37,42 +43,36 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set up a click listener to navigate to the registration fragment.
-        binding.tvDontHaveAccount.setOnClickListener {
-            // Navigate to the registration fragment when "Don't have an account?" text is clicked.
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-        }
-
+        // Set up click listeners and actions for UI elements.
         binding.apply {
-            // Register a click listener for the login button.
+            tvDontHaveAccount.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            }
+
             buttonLoginLogin.setOnClickListener {
                 val email = etEmailLogin.text.toString().trim()
                 val password = etPasswordLogin.text.toString()
-                // Call the ViewModel's login function with the provided email and password.
-                viewModel.login(email, password)
+
+                if (validateInput(email, password)) {
+                    // Input validation passed; call the ViewModel's login function.
+                    viewModel.login(email, password)
+                }
+            }
+
+            tvForgotPasswordLogin.setOnClickListener {
+                setupBottomSheetDialog { email -> viewModel.resetPassword(email) }
             }
         }
 
-        // Set up a click listener for the "Forgot Password" text.
-        binding.tvForgotPasswordLogin.setOnClickListener {
-            // Call a function to set up and display a bottom sheet dialog for resetting the password.
-            setupBottomSheetDialog { email -> viewModel.resetPassword(email) }
-        }
-
+        // Observe and handle reset password result.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
-            // Collect and react to changes in the ViewModel's 'resetPassword' flow.
-            viewModel.resetPassword.collect {
+            viewModel.resetPassword.collect { it ->
                 when (it) {
-                    is Resource.Loading -> {
-                        // Handle loading state, if needed.
-                    }
                     is Resource.Success -> {
-                        // Show a Snackbar to indicate success and provide a message.
                         Snackbar.make(requireView(), "Reset link was sent to your email", Snackbar.LENGTH_LONG).show()
                     }
                     is Resource.Error -> {
-                        // Show a Snackbar to indicate an error with the provided error message.
                         Snackbar.make(requireView(), "Error: ${it.message}", Snackbar.LENGTH_LONG).show()
                     }
                     else -> Unit
@@ -80,26 +80,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
+        // Observe and handle login result.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
-            // Collect and react to changes in the ViewModel's 'login' flow.
             viewModel.login.collect { it ->
                 when (it) {
                     is Resource.Loading -> {
-                        // Start an animation (presumably a loading animation) on the login button.
                         binding.buttonLoginLogin.startAnimation()
                     }
                     is Resource.Success -> {
-                        // Revert any animation on the login button.
                         binding.buttonLoginLogin.revertAnimation()
-                        // Create an intent to start the ShoppingActivity and clear the back stack.
-                        Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                        }
+                        val intent = Intent(requireActivity(), ShoppingActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
                     }
                     is Resource.Error -> {
-                        // Show a toast with the error message and revert any animation on the login button.
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                         binding.buttonLoginLogin.revertAnimation()
                     }
@@ -108,5 +103,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
     }
+
+    private fun validateInput(email: String, password: String): Boolean {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(requireContext(), "Both email and password are required.", Toast.LENGTH_LONG).show()
+            return false
+        } else if (!isValidEmail(email)) {
+            Toast.makeText(requireContext(), "Invalid email format.", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 }
+
+
 

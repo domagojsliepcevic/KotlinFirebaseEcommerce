@@ -39,7 +39,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCartBinding.inflate(inflater)
         return binding.root
     }
@@ -49,6 +49,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         // Set up the RecyclerView for the cart.
         setupCartRv()
+
+        // Handle the close button click to navigate back.
+        binding.imageCloseCart.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         // Observe and update the total price of cart products.
         @Suppress("DEPRECATION")
