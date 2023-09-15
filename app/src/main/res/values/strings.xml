@@ -54,4 +54,13 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="size_placeholder">S</string>
     <string name="product_added_to_cart">Product added to cart</string>
+    <string name="your_shopping_cart_is_empty">Your shopping cart is empty</string>
+    <string name="cart_item_placeholder_quantity">1</string>
+    <string name="cart_item_placeholder_size">L</string>
+    <string name="cart_item_placeholder_price">€1200</string>
+    <string name="cart_item_placeholder_name">Product name</string>
+    <string name="total">Total</string>
+    <string name="cart_total_placeholder_price">€150</string>
+    <string name="my_cart">My Cart</string>
+    <string name="check_out">Check out</string>
 </resources>

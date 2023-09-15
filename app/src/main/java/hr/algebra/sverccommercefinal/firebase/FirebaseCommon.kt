@@ -70,4 +70,38 @@ class FirebaseCommon(
                 onResult(null, exception)
             }
     }
+
+    /**
+     * Decrease the quantity of a product in the user's cart in Firestore.
+     *
+     * @param documentId: The document ID of the product in the cart collection.
+     * @param onResult: Callback function to handle the result of the operation.
+     *                  It provides the updated document ID or an Exception in case of an error.
+     */
+    fun decreaseQuantity(documentId: String, onResult: (String?, Exception?) -> Unit) {
+        firestore.runTransaction { transaction ->
+            val documentReference = cartCollection.document(documentId)
+            val document = transaction.get(documentReference)
+
+            val productObject = document.toObject(CartProduct::class.java)
+
+            productObject?.let { cartProduct ->
+                val newQuantity = cartProduct.quantity - 1
+                val newProductObject = cartProduct.copy(quantity = newQuantity)
+                transaction.set(documentReference, newProductObject)
+            }
+        }
+            .addOnSuccessListener {
+                // Successfully decreased the quantity of the product.
+                onResult(documentId, null)
+            }
+            .addOnFailureListener { exception ->
+                // An error occurred while decreasing the quantity of the product.
+                onResult(null, exception)
+            }
+    }
+
+    enum class QuantityChanging{
+        INCREASE,DECREASE
+    }
 }

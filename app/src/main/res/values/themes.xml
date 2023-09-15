@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SvercCommerceFinal" parent="Theme.Design.Light.NoActionBar"/>
+    <style name="Theme.SvercCommerceFinal" parent="Theme.MaterialComponents.Light.NoActionBar"/>
 
 
 
