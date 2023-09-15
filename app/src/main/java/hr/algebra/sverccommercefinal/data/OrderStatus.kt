@@ -35,3 +35,21 @@ sealed class OrderStatus(val status: String) {
     object Returned : OrderStatus("Returned")
 }
 
+/**
+ * Function to get an [OrderStatus] object based on a status string.
+ *
+ * @param status: The status string to convert to an [OrderStatus] object.
+ * @return The corresponding [OrderStatus] object, or [OrderStatus.Returned] if not matched.
+ */
+fun getOrderStatus(status: String): OrderStatus {
+    return when (status) {
+        "Ordered" -> OrderStatus.Ordered
+        "Canceled" -> OrderStatus.Canceled
+        "Confirmed" -> OrderStatus.Confirmed
+        "Shipped" -> OrderStatus.Shipped
+        "Delivered" -> OrderStatus.Delivered
+        else -> OrderStatus.Returned
+    }
+}
+
+

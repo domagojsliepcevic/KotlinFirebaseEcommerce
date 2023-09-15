@@ -89,4 +89,6 @@
     <string name="email_account_settings">Email</string>
     <string name="forgot_change_password_account_settings">Forgot/Change password</string>
     <string name="save_account_settings_button">Save</string>
+    <string name="all_orders">All orders</string>
+    <string name="no_orders_to_show">No orders to show</string>
 </resources>

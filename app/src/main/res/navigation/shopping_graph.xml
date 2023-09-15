@@ -78,4 +78,9 @@
         android:name="hr.algebra.sverccommercefinal.fragments.settings.UserAccountFragment"
         android:label="UserAccountFragment"
         tools:layout="@layout/fragment_user_account"/>
+    <fragment
+        android:id="@+id/allOrdersFragment"
+        android:name="hr.algebra.sverccommercefinal.fragments.settings.AllOrdersFragment"
+        android:label="AllOrdersFragment"
+        tools:layout="@layout/fragment_all_orders"/>
 </navigation>
