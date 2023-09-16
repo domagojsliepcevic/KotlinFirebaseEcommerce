@@ -91,6 +91,12 @@ class UserAccountFragment : Fragment() {
             }
         }
 
+        // Handle the close button click to navigate back.
+        binding.imageCloseUserAccount.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+
         // Set up click listener for updating the password.
         binding.tvUpdatePassword.setOnClickListener {
             // Show the password reset dialog.

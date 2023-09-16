@@ -71,13 +71,8 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        // Log out the user and navigate to the LoginRegisterActivity when the "Log Out" option is clicked.
-        binding.linearLogOut.setOnClickListener {
-            viewModel.logout()
-            val intent = Intent(requireActivity(), LoginRegisterActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        }
+        // Call the logout function when the "Log Out" option is clicked.
+        onLogoutClick()
 
         // Update the user profile information on the view.
         @Suppress("DEPRECATION")
@@ -110,4 +105,17 @@ class ProfileFragment : Fragment() {
         super.onResume()
         showBottomNavigationView()
     }
+
+    /**
+     * Function to handle logout when the "Log Out" option is clicked.
+     */
+    private fun onLogoutClick() {
+        binding.linearLogOut.setOnClickListener {
+            viewModel.logout()
+            val intent = Intent(requireActivity(), LoginRegisterActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+    }
 }
+

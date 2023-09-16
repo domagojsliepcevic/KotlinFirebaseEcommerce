@@ -11,4 +11,12 @@ class LoginRegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_register)
     }
+
+    /**
+     * Override the onBackPressed method to close the app when the back button is pressed.
+     */
+    override fun onBackPressed() {
+        // This will close the app when the back button is pressed from LoginRegisterActivity
+        finishAffinity()
+    }
 }
