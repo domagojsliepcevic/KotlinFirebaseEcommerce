@@ -62,7 +62,6 @@ class BillingFragment : Fragment() {
         // Retrieve billing products and total price from arguments.
         products = args.products.toList()
         totalPrice = args.totalPrice
-
     }
 
     /**
@@ -87,18 +86,14 @@ class BillingFragment : Fragment() {
         setupBillingProductsRv()
         setupAddressRv()
 
-        if (!args.payment){
+        // Hide some UI elements if the fragment is not used for payment.
+        if (!args.payment) {
             binding.apply {
                 buttonPlaceOrder.visibility = View.INVISIBLE
                 totalBoxContainer.visibility = View.INVISIBLE
                 middleLine.visibility = View.INVISIBLE
                 bottomLine.visibility = View.INVISIBLE
             }
-        }
-
-        // Handle the close button click to navigate back.
-        binding.imageCloseBilling.setOnClickListener {
-            findNavController().navigateUp()
         }
 
         // Handle the close button click to navigate back.
@@ -161,6 +156,10 @@ class BillingFragment : Fragment() {
         // Handle address selection.
         addressAdapter.onClick = {
             selectedAddress = it
+            if (!args.payment) {
+                val b = Bundle().apply { putParcelable("address", selectedAddress) }
+                findNavController().navigate(R.id.action_billingFragment_to_addressFragment, b)
+            }
         }
 
         // Handle the place order button click.
@@ -221,4 +220,5 @@ class BillingFragment : Fragment() {
         }
     }
 }
+
 

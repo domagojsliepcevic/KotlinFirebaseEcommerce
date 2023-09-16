@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hr.algebra.sverccommercefinal.data.Address
 import hr.algebra.sverccommercefinal.databinding.FragmentAddressBinding
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 class AddressFragment : Fragment() {
     private lateinit var binding: FragmentAddressBinding
     private val viewModel by viewModels<AddressViewModel>()
+    val args by navArgs<AddressFragmentArgs>()
 
     /**
      * Called when the fragment is created. Sets up observers for address addition and error messages.
@@ -30,6 +32,7 @@ class AddressFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Observe the address addition process and display loading or success/error messages.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.addNewAddress.collectLatest {
@@ -49,6 +52,7 @@ class AddressFragment : Fragment() {
             }
         }
 
+        // Observe and display error messages.
         @Suppress("DEPRECATION")
         lifecycleScope.launchWhenStarted {
             viewModel.error.collectLatest {
@@ -76,6 +80,20 @@ class AddressFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val address = args.address
+        if (address == null) {
+            binding.buttonDelete.visibility = View.GONE
+        } else {
+            binding.apply {
+                etAddressTitle.setText(address.addressTitle)
+                etFullName.setText(address.fullName)
+                etStreet.setText(address.street)
+                etPhone.setText(address.phone)
+                etCity.setText(address.city)
+                etState.setText(address.state)
+            }
+        }
+
         binding.apply {
             buttonSave.setOnClickListener {
                 val addressTitle = etAddressTitle.text.toString()
@@ -92,3 +110,4 @@ class AddressFragment : Fragment() {
         }
     }
 }
+
