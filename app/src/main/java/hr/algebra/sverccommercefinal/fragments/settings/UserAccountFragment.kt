@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import hr.algebra.sverccommercefinal.data.User
 import hr.algebra.sverccommercefinal.databinding.FragmentUserAccountBinding
@@ -110,6 +111,22 @@ class UserAccountFragment : Fragment() {
                     }
                     is Resource.Error -> {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
+        // Observe and handle reset password result.
+        @Suppress("DEPRECATION")
+        lifecycleScope.launchWhenStarted {
+            viewModel.resetPassword.collect { it ->
+                when (it) {
+                    is Resource.Success -> {
+                        Snackbar.make(requireView(), "Reset link was sent to your email", Snackbar.LENGTH_LONG).show()
+                    }
+                    is Resource.Error -> {
+                        Snackbar.make(requireView(), "Error: ${it.message}", Snackbar.LENGTH_LONG).show()
                     }
                     else -> Unit
                 }

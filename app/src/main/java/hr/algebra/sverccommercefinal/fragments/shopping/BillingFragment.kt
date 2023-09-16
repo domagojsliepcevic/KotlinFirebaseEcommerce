@@ -62,6 +62,7 @@ class BillingFragment : Fragment() {
         // Retrieve billing products and total price from arguments.
         products = args.products.toList()
         totalPrice = args.totalPrice
+
     }
 
     /**
@@ -85,6 +86,20 @@ class BillingFragment : Fragment() {
         // Set up RecyclerViews for user addresses and billing products.
         setupBillingProductsRv()
         setupAddressRv()
+
+        if (!args.payment){
+            binding.apply {
+                buttonPlaceOrder.visibility = View.INVISIBLE
+                totalBoxContainer.visibility = View.INVISIBLE
+                middleLine.visibility = View.INVISIBLE
+                bottomLine.visibility = View.INVISIBLE
+            }
+        }
+
+        // Handle the close button click to navigate back.
+        binding.imageCloseBilling.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         // Handle the close button click to navigate back.
         binding.imageCloseBilling.setOnClickListener {

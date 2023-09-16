@@ -81,6 +81,9 @@
         <argument
             android:name="products"
             app:argType="hr.algebra.sverccommercefinal.data.CartProduct[]" />
+        <argument
+            android:name="payment"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
